@@ -1,9 +1,11 @@
+// Package anvil provides an interface to access the Anvil API
 package anvil
 
 import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -13,14 +15,14 @@ import (
 const TEMPLATE_VERSION_LATEST = -1
 const TEMPLATE_VERSION_LATEST_PUBLISHED = -2
 
-var APP_VERSION = ""
+var VERSION = ""
 
 type Anvil struct {
 	APIKey         string
 	RESTAPIVersion string
 	BaseURL        string
 	UserAgent      string
-	Debug          bool
+	Logger         *log.Logger
 
 	client *http.Client
 }
@@ -31,14 +33,22 @@ func New(apiKey string) (anvil *Anvil) {
 		RESTAPIVersion: "v1",
 		BaseURL:        "https://app.useanvil.com",
 		UserAgent:      "golang-anvil",
+		Logger:         log.New(nil, "", 0),
 		client:         http.DefaultClient,
 	}
-	if APP_VERSION != "" {
-		anvil.UserAgent += "/" + APP_VERSION
+	if VERSION != "" {
+		anvil.UserAgent += "/" + VERSION
 	}
 	return
 }
 
+// FillPDF fills an existing template with provided payload data.
+//
+// Use the casts graphql query to get a list of available templates you can use for this request.
+//
+// By default, the request will use the latest published version.
+// You can also use the constants `anvil.TEMPLATE_VERSION_LATEST_PUBLISHED` and `anvil.TEMPLATE_VERSION_LATEST`
+// instead of providing a specific version number.
 func (s *Anvil) FillPDF(templateID, templateVersion string, payload interface{}) (pdf []byte, err error) {
 	var requestBody []byte
 	switch v := payload.(type) {
@@ -75,6 +85,14 @@ func (s *Anvil) FillPDF(templateID, templateVersion string, payload interface{})
 	return
 }
 
+// GeneratePDF dynamically generates a new PDF with provided payload data.
+// Useful for agreements, invoices, disclosures, or any other text-heavy documents.
+//
+// By default, GeneratePDF will format data assuming it's in markdown.
+//
+// HTML is another supported input type. This can be used by providing
+// `"type": "html"` in the payload and making the `data` field a dict containing
+// keys `"html"` and an optional `"css"`.
 func (s *Anvil) GeneratePDF(payload interface{}) (pdf []byte, err error) {
 	var requestBody []byte
 	switch v := payload.(type) {
