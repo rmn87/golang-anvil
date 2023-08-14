@@ -10,16 +10,17 @@ import (
 	"github.com/pkg/errors"
 )
 
-const VERSION_LATEST = -1
-const VERSION_LATEST_PUBLISHED = -2
+const TEMPLATE_VERSION_LATEST = -1
+const TEMPLATE_VERSION_LATEST_PUBLISHED = -2
 
-var gitVersionTag = ""
+var APP_VERSION = ""
 
 type Anvil struct {
 	APIKey         string
 	RESTAPIVersion string
 	BaseURL        string
 	UserAgent      string
+	Debug          bool
 
 	client *http.Client
 }
@@ -32,8 +33,8 @@ func New(apiKey string) (anvil *Anvil) {
 		UserAgent:      "golang-anvil",
 		client:         http.DefaultClient,
 	}
-	if gitVersionTag != "" {
-		anvil.UserAgent += "/" + gitVersionTag
+	if APP_VERSION != "" {
+		anvil.UserAgent += "/" + APP_VERSION
 	}
 	return
 }

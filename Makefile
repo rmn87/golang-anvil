@@ -9,16 +9,9 @@ clean:
 test: 
 	go test -race -coverprofile=coverage.txt -covermode=atomic
 
-##########
-# CLI
-##########
-
-build-cli:
+build:
 	go build -o bin/cli cmd/cli/main.go
-run-cli:
-	bin/api
-develop-api:
-	CompileDaemon -build="go build -o bin/cli cmd/cli/main.go" -command="make run-cli" -exclude-dir=.git
+run:
+	bin/cli
 build-docs:
 	go doc
-
