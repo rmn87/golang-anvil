@@ -1,6 +1,6 @@
 module github.com/rmn87/golang-anvil
 
-go 1.21.0
+go 1.21
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
