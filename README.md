@@ -28,9 +28,3 @@ General API documentation: [Anvil API docs](https://www.useanvil.com/docs)
 ```shell
 $ go get github.com/rmn87/golang-anvil
 ```
-
-or install the `anvil` CLI tool:
-
-```shell
-$ go install github.com/rmn87/golang-anvil
-```
