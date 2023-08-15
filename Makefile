@@ -5,6 +5,6 @@ clean:
 test: 
 	go test
 build:
-	go build -ldflags "-X anvil.VERSION=${VERSION}" -o bin/cli cmd/cli/main.go
+	go build -ldflags "-X anvil.VERSION=${VERSION}" -o bin/anvil cmd/cli/main.go
 build-docs:
 	go doc

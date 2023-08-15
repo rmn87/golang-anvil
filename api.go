@@ -55,20 +55,19 @@ type Page struct {
 	Height       *int    `json:"height,omitempty"`
 }
 
-func (s *Anvil) request(method, path string, body []byte, queryParams url.Values, numRetries int) (response *http.Response, err error) {
+func (s *Anvil) restRequest(method, path string, body []byte, queryParams url.Values, numRetries int) (response *http.Response, err error) {
 	url := fmt.Sprintf("%s/api/%s/%s", s.BaseURL, s.RESTAPIVersion, strings.TrimLeft(path, "/"))
-	if queryParams != nil && len(queryParams) > 0 {
+	if len(queryParams) > 0 {
 		url += "?" + queryParams.Encode()
 	}
 	request, err := http.NewRequest(method, url, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, errors.Wrap(err, "issue building request")
 	}
-	request.SetBasicAuth(s.APIKey, "")
 	request.Header.Add("Content-Type", "application/json")
 
 	for i := 0; i < numRetries+1; i++ {
-		response, err := s.client.Do(request)
+		response, err := s.restClient.Do(request)
 		if err != nil {
 			return nil, errors.Wrap(err, "issue sending request")
 		}
