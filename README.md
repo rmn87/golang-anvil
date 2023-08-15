@@ -1,5 +1,5 @@
 # golang-anvil
- Golang API Client and CLI tool for Anvil 
+ Golang API Client and CLI Tool for Anvil 
 
 This is a library that provides an interface to access the [Anvil API](https://www.useanvil.com/developers) from applications
 written in the Go programming language.
